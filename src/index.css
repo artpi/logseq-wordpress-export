@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html, body {
+  background-color: transparent;
+}
+#root {
+  @apply w-screen h-screen;
+}
+
+.button {
+  padding: 5px 10px;
+  background-color: var(--cl-charcoal);
+  border: 1px solid #ddd;
+  color: white;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.button:hover {
+  background-color: var(--cl-darkjungle);
+}
+
+.div.scroll {
+  margin:4px, 4px;
+  padding:4px;
+  background-color: green;
+  width: 500px;
+  height: 110px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align:justify;
+}
+
+/* ::marker {     
+  unicode-bidi: isolate;     
+  font-variant-numeric: tabular-nums;     
+  white-space: pre;     
+  text-transform: none;
+  transform-origin: 0px 5px 5px;
+} */
+.chinese {
+  font-family: "SimSun";
+}
+
+.p {
+  page-break-inside: avoid;
+}
