@@ -1,3 +1,4 @@
+import '@logseq/libs';
 import markdownMark from 'markdown-it-mark';
 import markdownIt from 'markdown-it';
 import markdownTable from 'markdown-it-multimd-table';
