@@ -61,3 +61,24 @@ html {
 .post_content {
   overflow: wrap;
 }
+
+.post_content h1 {  display: block;  font-size: 2em;  margin-block-start: 0.67__qem;  margin-block-end: 0.67em;  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
+ .post_content h2 {  display: block;  font-size: 1.5em;  margin-block-start: 0.83__qem;  /* margin-block-end: 0.83em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
+ .post_content h3 {  display: block;  font-size: 1.17em;  margin-block-start: 1__qem;  /* margin-block-end: 1em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
+ .post_content h4 {  display: block;  margin-block-start: 1.33__qem;  /* margin-block-end: 1.33em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
+ .post_content h5 {  display: block;  font-size: 0.83em;  margin-block-start: 1.67__qem;  /* margin-block-end: 1.67em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
+ .post_content h6 {  display: block;  font-size: 0.67em;  margin-block-start: 2.33__qem;  margin-block-end: 0.2em;  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;} /* lists */
+ .post_content ul, .post_content menu, .post_content dir {  display: block;  list-style-type: disc;  margin-block-start: 1__qem;  margin-block-end: 1em;  margin-inline-start: 0;  margin-inline-end: 0;  padding-inline-start: 40px;}
+ .post_content ol {  display: block;  list-style-type: decimal;  margin-block-start: 1__qem;  margin-block-end: 1em;  margin-inline-start: 0;  margin-inline-end: 0;  padding-inline-start: 40px;}
+ .post_content  li {  display: list-item;  text-align: match-parent;}
+ .post_content  ul ul,  .post_content ol ul {  list-style-type: disc;}
+ .post_content  ol ol ul, .post_content  ol ul ul, .post_content ul ol ul,  .post_content ul ul ul {  list-style-type: disc;}
+ .post_content dd {  display: block;  margin-inline-start: 40px;}
+ .post_content dl {  display: block;  margin-block-start: 1__qem;  margin-block-end: 1em;  margin-inline-start: 0;  margin-inline-end: 0;}
+ .post_content dt {  display: block;}ol ul,ul ol,ul ul,ol ol {  margin-block-start: 0;  margin-block-end: 0;}
+ .post_content .italic {  font-style: italic;}
+ .post_content .bold {  font-weight: bold;}
+ .post_content .codeme {  font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,    monospace;}
+ .post_content .br {  display: block;  margin-bottom: 0em;}
+ .post_content .brmedium {  display: block;  margin-bottom: 1em;}
+ .post_content  .brlarge {  display: block;  margin-bottom: 2em;}

@@ -144,7 +144,6 @@ function renderApp( env: string ) {
 	);
 	logseq.showMainUI();
 }
-var final3String = '<html><body><h1>Hello YOu are mmean</h1></body><html>';
 
 async function formatText( text2, template ) {
 	var text: string = text2.replace( /:LOGBOOK:|collapsed:: true/gi, '' );
@@ -195,12 +194,14 @@ async function formatText( text2, template ) {
 	}
 }
 
-var md = new markdownIt().use( markdownMark ).use( markdownTable );
-md.inline.ruler.enable( [ 'mark' ] );
+
+
 export async function createPDF(
 	templateName,
 	block = undefined
 ) {
+	var md = new markdownIt().use( markdownMark ).use( markdownTable );
+	md.inline.ruler.enable( [ 'mark' ] );
 	var finalString;
 
 	const currentBlock = await logseq.Editor.getCurrentPageBlocksTree();
@@ -329,10 +330,9 @@ export async function createPDF(
 	console.log( finalString );
 	console.log( final2String );
 	// final2String = result.replace();
-	final3String = `<html><head><style>@import url('https://fonts.googleapis.com/css2?family=ZCOOL+XiaoWei&display=swap');</style><style>${ baseCSS }</style></head><body><style>${ css3 }</style><div id = "you are cool" style='padding: 1rem'">${ final2String }</div></body></html>`;
 
 	logseq.App.getCurrentGraph().then( async ( graph ) => {
-		var final4String = final3String
+		var final4String = final2String
 			.replaceAll( '../assets', `${ graph.path }/assets` )
 			.replaceAll( '<p>BahBahBlackSheepYouAreAMeanSheep</p>', '<br>' );
 		var final5String = final4String;
