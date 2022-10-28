@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-const App3: React.FC< { htmlText } > = ( { htmlText } ) => {
+const PreviewScreen: React.FC< { htmlText } > = ( { htmlText } ) => {
 	return (
 		<div>
 			<div className="w-screen h-screen flex items-center justify-center text-black">
@@ -34,4 +34,4 @@ const App3: React.FC< { htmlText } > = ( { htmlText } ) => {
 	);
 };
 
-export default App3;
+export default PreviewScreen;

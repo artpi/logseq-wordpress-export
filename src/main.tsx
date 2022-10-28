@@ -9,146 +9,9 @@ import markdownTable from 'markdown-it-multimd-table';
 import {
 	BlockCommandCallback,
 	SettingSchemaDesc,
-	StyleOptions,
 } from '@logseq/libs/dist/LSPlugin.user';
-import App3 from './App3';
-const baseStyleOptions: StyleOptions = {
-	key: 'printStyle',
-	style: `
-@media print {    
-  * {
-    overflow:visible !important;
-  }
-  
-  div[class^="CodeMirror"] {
-    overflow:hidden !important;
-  }
-  
-  .cm-s-light > div > textarea {
-    display: none;
-  }
-  .cm-s-solarized.cm-s-light {
-    background-color: #fdf6e3 !important;
-  }
-  
-  .CodeMirror-gutters {
-    display:none;
-  }
-  .CodeMirror-linenumber {
-    display:none;
-  }
-  .CodeMirror-sizer {
-    margin-left: 1px !important;
-    margin-bottom: 1px !important;
-    min-height: 10px !important;
-  }
-  
-  .page {
-    page-break-after:always;
-  }
-  #head {
-    display:none;
-  }
-  #left-sidebar {
-    display:none;
-  }
-  #right-sidebar {
-    display:none;
-  }
-  .cp__sidebar-help-btn {
-    display:none;
-  }
-}
-`,
-};
+import PreviewScreen from './PreviewScreen';
 
-const handleStyle = () => {
-	if ( logseq.settings.retainedOptions.includes( 'Hide Page Properties' ) ) {
-		console.log( 'Hidden' );
-		logseq.provideStyle( {
-			key: 'printStyle2',
-			style: `
-      @media print {
-        .pre-block {
-          display: none;
-      }
-    }
-    `,
-		} );
-	} else {
-		logseq.provideStyle( {
-			key: 'printStyle2',
-			style: `@media print { .pre-block { } }`,
-		} );
-	}
-	if ( logseq.settings.retainedOptions.includes( 'Hide Brackets' ) ) {
-		logseq.provideStyle( {
-			key: 'printStyle3',
-			style: `
-      @media print {
-        .bracket {
-          display: none;
-      }
-    }
-    `,
-		} );
-	} else {
-		logseq.provideStyle( {
-			key: 'printStyle3',
-			style: `@media print { .bracket { } }`,
-		} );
-	}
-	if ( logseq.settings.retainedOptions.includes( 'Make Bullets Black' ) ) {
-		logseq.provideStyle( {
-			key: 'printStyle4',
-			style: `
-      @media print {
-        .bullet-container .bullet {
-          -webkit-print-color-adjust: exact;
-          background-color: black;
-        }
-    }
-    `,
-		} );
-	} else {
-		logseq.provideStyle( {
-			key: 'printStyle4',
-			style: `@media print { .bullet-container .bullet { -webkit-print-color-adjust: exact;} }`,
-		} );
-	}
-	if (
-		logseq.settings.retainedOptions.includes( 'Hide Linked References' )
-	) {
-		console.log( 'Hide  linked referenced' );
-		logseq.provideStyle( {
-			key: 'printStyle5',
-			style: `
-      @media print {
-        .references {
-          display:none;
-        }
-        .page-hierarchy {
-          display:none;
-        }
-    }
-    `,
-		} );
-	} else {
-		logseq.provideStyle( {
-			key: 'printStyle5',
-			style: `@media print { .references { } .page-hierarchy { } }`,
-		} );
-	}
-};
-const printPdf = () => {
-	//Credits to https://github.com/supery-chen/
-
-	var script = document.createElement( 'script' );
-	script.type = 'text/javascript';
-	script.text = 'window.print()';
-	parent.document.body.appendChild( script );
-	parent.document.body.removeChild( script );
-};
 
 const propertyOptions = [
 	'Hide Page Properties',
@@ -270,15 +133,12 @@ let settings: SettingSchemaDesc[] = [
 
 logseq.useSettingsSchema( settings );
 
-export function downloadPDF() {
-	window.print();
-}
 
 function renderApp( env: string ) {
 	//If bullet points have been requested
 	ReactDOM.render(
 		<React.StrictMode>
-			<App3 htmlText={ env } />
+			<PreviewScreen htmlText={ env } />
 		</React.StrictMode>,
 		document.getElementById( 'root' )
 	);
@@ -339,19 +199,9 @@ var md = new markdownIt().use( markdownMark ).use( markdownTable );
 md.inline.ruler.enable( [ 'mark' ] );
 export async function createPDF(
 	templateName,
-	block = undefined,
-	fullText = undefined
+	block = undefined
 ) {
 	var finalString;
-
-	if ( fullText != undefined ) {
-		handleStyle();
-		logseq.hideMainUI();
-
-		setTimeout( printPdf, 100 );
-		// printPdf();
-		throw 'No text to print';
-	}
 
 	const currentBlock = await logseq.Editor.getCurrentPageBlocksTree();
 	if ( block != undefined ) {
@@ -552,10 +402,6 @@ const main = async () => {
     createPDF( 'template1' );
 	}
 
-
-	//Credits to https://github.com/supery-chen/ for the below code
-
-	logseq.provideStyle( baseStyleOptions );
 
 	logseq.App.registerPageMenuItem(
 		'Download Page for WordPress',
