@@ -60,6 +60,7 @@ html {
 
 .post_content {
   overflow: wrap;
+  padding: 20px;
 }
 
 .post_content h1 {  display: block;  font-size: 2em;  margin-block-start: 0.67__qem;  margin-block-end: 0.67em;  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
@@ -82,3 +83,4 @@ html {
  .post_content .br {  display: block;  margin-bottom: 0em;}
  .post_content .brmedium {  display: block;  margin-bottom: 1em;}
  .post_content  .brlarge {  display: block;  margin-bottom: 2em;}
+ .post_content a { text-decoration: underline; color:blue }
