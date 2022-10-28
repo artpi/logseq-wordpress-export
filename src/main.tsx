@@ -234,8 +234,6 @@ export async function createPDF(
 		}`;
 	}
 
-	// var finalString = ``;
-
 	if (
 		logseq.settings[ `${ templateName }Choice` ] ==
 		'Bullets for non top level elements'
@@ -320,18 +318,13 @@ export async function createPDF(
 	// Make logseqs highlights into MD standard
 	finalString = finalString.replaceAll( '^^', '==' );
 
-	const baseCSS =
-		"h1 {  display: block;  font-size: 2em;  margin-block-start: 0.67__qem;  margin-block-end: 0.67em;  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}:is(article, aside, nav, section) h1 {  font-size: 1.5em;  margin-block-start: 0.83__qem;  margin-block-end: 0.83em;}:is(article, aside, nav, section) :is(article, aside, nav, section) h1 {  font-size: 1.17em;  margin-block-start: 1__qem;  margin-block-end: 1em;}:is(article, aside, nav, section)  :is(article, aside, nav, section)  :is(article, aside, nav, section)  h1 {  font-size: 1em;  margin-block-start: 1.33__qem;  margin-block-end: 1.33em;}:is(article, aside, nav, section)  :is(article, aside, nav, section)  :is(article, aside, nav, section)  :is(article, aside, nav, section)  h1 {  font-size: 0.83em;  margin-block-start: 1.67__qem;  margin-block-end: 1.67em;}:is(article, aside, nav, section)  :is(article, aside, nav, section)  :is(article, aside, nav, section)  :is(article, aside, nav, section)  :is(article, aside, nav, section)  h1 {  font-size: 0.67em;  margin-block-start: 2.33__qem;  margin-block-end: 2.33em;}h2 {  display: block;  font-size: 1.5em;  margin-block-start: 0.83__qem;  /* margin-block-end: 0.83em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}h3 {  display: block;  font-size: 1.17em;  margin-block-start: 1__qem;  /* margin-block-end: 1em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}h4 {  display: block;  margin-block-start: 1.33__qem;  /* margin-block-end: 1.33em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}h5 {  display: block;  font-size: 0.83em;  margin-block-start: 1.67__qem;  /* margin-block-end: 1.67em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}h6 {  display: block;  font-size: 0.67em;  margin-block-start: 2.33__qem;  margin-block-end: 0.2em;  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;} /* lists */ul,menu,dir {  display: block;  list-style-type: disc;  margin-block-start: 1__qem;  margin-block-end: 1em;  margin-inline-start: 0;  margin-inline-end: 0;  padding-inline-start: 40px;}ol {  display: block;  list-style-type: decimal;  margin-block-start: 1__qem;  margin-block-end: 1em;  margin-inline-start: 0;  margin-inline-end: 0;  padding-inline-start: 40px;}li {  display: list-item;  text-align: match-parent;} /* FIXME: this should also match ::before::marker and ::after::marker but we don't support    this yet. When we do, we can remove the code specific to ::before and ::after in    RenderListItem::computeMarkerStyle(), see bugs.webkit.org/b/218897. */::marker {  unicode-bidi: isolate;  font-variant-numeric: tabular-nums;  white-space: pre;  text-transform: none;}ul ul,ol ul {  list-style-type: disc;}ol ol ul,ol ul ul,ul ol ul,ul ul ul {  list-style-type: disc;}dd {  display: block;  margin-inline-start: 40px;}dl {  display: block;  margin-block-start: 1__qem;  margin-block-end: 1em;  margin-inline-start: 0;  margin-inline-end: 0;}dt {  display: block;}ol ul,ul ol,ul ul,ol ol {  margin-block-start: 0;  margin-block-end: 0;}.italic {  font-style: italic;}.bold {  font-weight: bold;}.codeme {  font-family: Menlo, Consolas, Monaco, Liberation Mono, Lucida Console,    monospace;}.br {  display: block;  margin-bottom: 0em;}.brmedium {  display: block;  margin-bottom: 1em;}.brlarge {  display: block;  margin-bottom: 2em;}";
-	const settings = logseq.settings;
-	const css3 = settings[ templateName + 'CSS' ];
-
 	// console.log(result);
 	var final2String = md.render( finalString );
 	console.log( finalString );
 	console.log( final2String );
 	// final2String = result.replace();
 
-	logseq.App.getCurrentGraph().then( async ( graph ) => {
+	return logseq.App.getCurrentGraph().then( async ( graph ) => {
 		var final4String = final2String
 			.replaceAll( '../assets', `${ graph.path }/assets` )
 			.replaceAll( '<p>BahBahBlackSheepYouAreAMeanSheep</p>', '<br>' );
@@ -349,14 +342,11 @@ export async function createPDF(
 				top.document.head.innerHTML +
 				final5String +
 				'</html>';
-			renderApp( finalResult );
+			return finalResult;
 		} else {
-			renderApp( final5String );
+			return final5String;
 		}
-		handleClosePopup();
 	} );
-
-	blocks2 = [];
 }
 
 var blocks2 = [];
@@ -390,7 +380,10 @@ const main = async () => {
 		},
 	} );
 	const exportSinglePDF: BlockCommandCallback = async ( block ) => {
-		createPDF( 'template1', block.uuid );
+		createPDF( 'template1', block.uuid ).then( html => {
+			renderApp( html );
+			handleClosePopup();
+		} );
 	};
 
 	logseq.Editor.registerBlockContextMenuItem(
@@ -399,7 +392,10 @@ const main = async () => {
 	);
 
 	function initializeApp() {
-    createPDF( 'template1' );
+    	createPDF( 'template1' ).then( html => {
+			renderApp( html );
+			handleClosePopup();
+		} );
 	}
 
 
