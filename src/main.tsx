@@ -1,7 +1,6 @@
 import '@logseq/libs';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App2 from './App2';
 import './index.css';
 import { handleClosePopup } from './handleClosePopup';
 import markdownMark from 'markdown-it-mark';
@@ -550,18 +549,9 @@ const main = async () => {
 	);
 
 	function initializeApp() {
-		renderSecondApp();
-		logseq.showMainUI();
-		handleClosePopup();
+    createPDF( 'template1' );
 	}
-	function renderSecondApp() {
-		ReactDOM.render(
-			<React.StrictMode>
-				<App2 />
-			</React.StrictMode>,
-			document.getElementById( 'root' )
-		);
-	}
+
 
 	//Credits to https://github.com/supery-chen/ for the below code
 
