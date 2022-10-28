@@ -46,6 +46,19 @@ async function formatText( text2, template ) {
 	) {
 		text = text.replaceAll( /((?<=::).*|.*::)/g, '' );
 	}
+
+	const linkRef =  ( /\[([^\]]+)\]\(\[\[([^\]]+)\]\]\)/ ).exec( text );
+	if ( linkRef != null ) {
+        const urlToReplace = await getUrlFromAttributeInPageName( linkRef[2] );
+		if ( urlToReplace ) {
+			text = text.replace(
+				`[[${linkRef[2]}]]`,
+				urlToReplace
+			);
+		}
+	}
+
+
 	if (
 		logseq.settings[ `${ template }Options` ].includes( 'Hide Brackets' )
 	) {
@@ -56,7 +69,10 @@ async function formatText( text2, template ) {
     return text;
 }
 
-
+async function getUrlFromAttributeInPageName( title ) {
+    const page = await logseq.Editor.getPage( title );
+    return page?.properties?.url;
+}
 
 export default async function parse(
 	templateName,
@@ -66,6 +82,11 @@ export default async function parse(
     var blocks2 = [];
 	md.inline.ruler.enable( [ 'mark' ] );
 	var finalString;
+    const pageUrlMapping = [];
+    ( await logseq.Editor.getAllPages() ).forEach( page => {
+        
+    } );
+
 
     // Print only one block
 	if ( block != undefined ) {
