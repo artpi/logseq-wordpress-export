@@ -178,32 +178,12 @@ export default async function parse(
 
 	// console.log(result);
 	var final2String = md.render( finalString );
-	console.log( finalString );
-	console.log( final2String );
-	// final2String = result.replace();
 
 	return logseq.App.getCurrentGraph().then( async ( graph ) => {
 		var final4String = final2String
 			.replaceAll( '../assets', `${ graph.path }/assets` )
 			.replaceAll( '<p>BahBahBlackSheepYouAreAMeanSheep</p>', '<br>' );
-		var final5String = final4String;
-		//Add paragraph spacing if all bullets are selected
-		console.log( logseq.settings[ templateName + 'Options' ] );
-		if (
-			logseq.settings[ templateName + 'Options' ].includes(
-				'Inherit logseq CSS'
-			)
-		) {
-			console.log( 'inheritcss' );
-			let finalResult =
-				'<html>' +
-				top.document.head.innerHTML +
-				final5String +
-				'</html>';
-			return finalResult;
-		} else {
-			return final5String;
-		}
+		return final4String;
 	} );
 }
 
