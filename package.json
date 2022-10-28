@@ -1,9 +1,9 @@
 {
-  "name": "logseq-pdf-export-plugin",
-  "version": "2.2.4",
+  "name": "logseq-wordpress-export",
+  "version": "0.0.1",
   "main": "dist/index.html",
   "logseq": {
-    "id": "logseq-pdf-export-plugin",
+    "id": "logseq-wordpress-export-plugin",
     "icon": "logo.png"
   },
   "scripts": {

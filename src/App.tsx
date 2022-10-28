@@ -13,7 +13,7 @@ const App: React.FC<{ htmlText }> = ({ htmlText }) => {
       <div className="w-screen h-screen flex items-center justify-center text-black">
         <div className="w-6/6 h-5/6 bg-clip-padding">
           <div className="bg-slate-400 z-30 rounded-2xl p-4">
-            <h1 className="font-bold text-4xl">PDF Preview</h1>
+            <h1 className="font-bold text-4xl">WordPress code</h1>
             <br></br>
             <div
               dangerouslySetInnerHTML={{ __html: htmlText }}
@@ -23,7 +23,7 @@ const App: React.FC<{ htmlText }> = ({ htmlText }) => {
             <br></br>
             <div className="">
               <button className="button" onClick={() => downloadPDF()}>
-                Download
+                Copy
               </button>
             </div>
           </div>

@@ -292,6 +292,9 @@ async function formatText(text2, template) {
     text = text.substring(0, text.indexOf("CLOCK: ["));
   }
 
+  // Strip out Readwise Location tags
+  text = text.replace( /\(\[Location\s[0-9]+\]\([^)]+readwise[^)]+\)\)/g, '' ); // Remove readwise links
+
   if (logseq.settings[`${template}Options`].includes("Hide Page Properties")) {
     text = text.replaceAll(/((?<=::).*|.*::)/g, "");
   }
@@ -507,7 +510,7 @@ const main = async () => {
   };
 
   logseq.Editor.registerBlockContextMenuItem(
-    "Export Block as PDF",
+    "Export Block for WordPress",
     exportSinglePDF
   );
 
@@ -529,7 +532,7 @@ const main = async () => {
 
   logseq.provideStyle(baseStyleOptions);
 
-  logseq.App.registerPageMenuItem("Download Page as PDF", initializeApp);
+  logseq.App.registerPageMenuItem("Download Page for WordPress", initializeApp);
 };
 
 logseq.ready(main).catch(console.error);
