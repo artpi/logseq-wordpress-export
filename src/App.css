@@ -57,3 +57,7 @@ html {
 .p {
   page-break-inside: avoid;
 }
+
+.post_content {
+  overflow: wrap;
+}

@@ -1,24 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
-import { downloadPDF } from './main';
-import ReactDOM from 'react-dom';
-import App4 from './finalDownloadScreen';
 const App3: React.FC< { htmlText } > = ( { htmlText } ) => {
-	function handleInputChange( event ) {
-		const target = event.target;
-		// const value = target.type === 'checkbox' ? target.checked : target.value;
-		const name = target.name;
-	}
-
-	function downloadBulletLess() {
-		console.log( 'HIJJJ' );
-		ReactDOM.render(
-			<React.StrictMode>
-				<App4 htmlText={ htmlText } />
-			</React.StrictMode>,
-			document.getElementById( 'root' )
-		);
-	}
 	return (
 		<div>
 			<div className="w-screen h-screen flex items-center justify-center text-black">
@@ -28,23 +10,19 @@ const App3: React.FC< { htmlText } > = ( { htmlText } ) => {
 						<div className="">
 							<button
 								className="button"
-								onClick={ () => console.log( 'Potato' ) }
+								onClick={ () => navigator.clipboard.writeText( htmlText ).then( function() {
+									alert( 'Text copied to clipboard' );
+								  } ) }
 							>
-								Download
+								Copy Text to clipboard
 							</button>
 						</div>
 						<br></br>
 						<div
 							dangerouslySetInnerHTML={ { __html: htmlText } }
 							id="cooldiv"
-							className="bg-white rounded-xl"
+							className="post_content bg-white rounded-xl"
 						></div>
-
-						{ /* <div><label><input type="checkbox"/>Value</label></div> */ }
-						{ /* <div><label><input type="checkbox" name = "Page Properties" onChange={ e => handleInputChange(e)}/>hide page properties</label></div>
-      <div><label><input type="checkbox"/>hide brackets</label></div>
-      <div><label><input type="checkbox"/>render with bullets</label></div>
-      <div><label><input type="checkbox"/>My Value</label></div> */ }
 					</div>
 				</div>
 			</div>
