@@ -6,6 +6,11 @@ import markdownTable from 'markdown-it-multimd-table';
 async function formatText( text2, template ) {
 	var text: string = text2.replace( /:LOGBOOK:|collapsed:: true/gi, '' );
 
+    // Strip out queries
+    text = text.replace( /\#\+BEGIN_QUERY([^]*)\#\+END_QUERY/g, function( whole, query ) {
+        return '';
+    } );
+
     // Handle references
 	const rxGetId = /\(\(([^)]*)\)\)/;
 	const blockId = rxGetId.exec( text );
@@ -47,6 +52,7 @@ async function formatText( text2, template ) {
 		text = text.replaceAll( /((?<=::).*|.*::)/g, '' );
 	}
 
+    // This will format links like [Title]([[Other page]]) to url contained in the target page IF it has a URL property.
 	const linkRef =  ( /\[([^\]]+)\]\(\[\[([^\]]+)\]\]\)/ ).exec( text );
 	if ( linkRef != null ) {
         const urlToReplace = await getUrlFromAttributeInPageName( linkRef[2] );
@@ -58,12 +64,21 @@ async function formatText( text2, template ) {
 		}
 	}
 
-
-	if (
-		logseq.settings[ `${ template }Options` ].includes( 'Hide Brackets' )
-	) {
-		text = text.replaceAll( '[[', '' );
-		text = text.replaceAll( ']]', '' );
+    // This will link [[Other blog post]] to the url parameter in that page.
+    const regRef =  ( /\[\[([^\]]+)\]\]/ ).exec( text );
+	if ( regRef != null ) {
+        const urlToReplace = await getUrlFromAttributeInPageName( regRef[1] );
+		if ( urlToReplace ) {
+			text = text.replace(
+				regRef[0],
+				`[${regRef[1]}](${urlToReplace})`
+			);
+		} else {
+			text = text.replace(
+				regRef[0],
+				regRef[1]
+			);
+        }
 	}
 
     return text;
