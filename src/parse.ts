@@ -97,11 +97,6 @@ export default async function parse(
     var blocks2 = [];
 	md.inline.ruler.enable( [ 'mark' ] );
 	var finalString;
-    const pageUrlMapping = [];
-    ( await logseq.Editor.getAllPages() ).forEach( page => {
-        
-    } );
-
 
     // Print only one block
 	if ( block != undefined ) {
