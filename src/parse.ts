@@ -5,6 +5,30 @@ import markdownTable from 'markdown-it-multimd-table';
 
 async function formatText( text2, template ) {
 	var text: string = text2.replace( /:LOGBOOK:|collapsed:: true/gi, '' );
+
+    // Handle references
+	const rxGetId = /\(\(([^)]*)\)\)/;
+	const blockId = rxGetId.exec( text );
+	if ( blockId != null ) {
+		const block = await logseq.Editor.getBlock( blockId[ 1 ], {
+			includeChildren: true,
+		} );
+		//optional based on setting enabled
+
+		if ( block != null ) {
+			text = text.replace(
+				`((${ blockId[ 1 ] }))`,
+				block.content.substring( 0, block.content.indexOf( 'id::' ) )
+			);
+		}
+	}
+
+    // Strip out id tags:
+	if ( text.indexOf( `\nid:: ` ) !== -1 ) {
+		text = text.substring( 0, text.indexOf( `\nid:: ` ) );
+	}
+
+    // Strip out the clock stuff
 	if ( text.includes( 'CLOCK: [' ) ) {
 		text = text.substring( 0, text.indexOf( 'CLOCK: [' ) );
 	}
@@ -29,27 +53,7 @@ async function formatText( text2, template ) {
 		text = text.replaceAll( ']]', '' );
 	}
 
-	const rxGetId = /\(\(([^)]*)\)\)/;
-	const blockId = rxGetId.exec( text );
-	if ( blockId != null ) {
-		const block = await logseq.Editor.getBlock( blockId[ 1 ], {
-			includeChildren: true,
-		} );
-		//optional based on setting enabled
-
-		if ( block != null ) {
-			text = text.replace(
-				`((${ blockId[ 1 ] }))`,
-				block.content.substring( 0, block.content.indexOf( 'id::' ) )
-			);
-		}
-	}
-
-	if ( text.indexOf( `\nid:: ` ) === -1 ) {
-		return text;
-	} else {
-		return text.substring( 0, text.indexOf( `\nid:: ` ) );
-	}
+    return text;
 }
 
 
@@ -59,12 +63,13 @@ export default async function parse(
 	block = undefined
 ) {
 	var md = new markdownIt().use( markdownMark ).use( markdownTable );
+    var blocks2 = [];
 	md.inline.ruler.enable( [ 'mark' ] );
 	var finalString;
 
-	const currentBlock = await logseq.Editor.getCurrentPageBlocksTree();
+    // Print only one block
 	if ( block != undefined ) {
-		parseBlocksTree(
+		blocks2 = parseBlocksTree(
 			await logseq.Editor.getBlock( block, { includeChildren: true } )
 		);
 		if (
@@ -84,8 +89,14 @@ export default async function parse(
 			finalString = ``;
 		}
 	} else {
+        // Print whole page
+        let currentBlock = await logseq.Editor.getCurrentPageBlocksTree();
+        // If first block contains properties, remove entire block.
+        if ( currentBlock[ 0 ] && currentBlock[ 0 ].properties ) {
+            currentBlock = currentBlock.slice( 1 );
+        }
 		for ( const x in currentBlock ) {
-			parseBlocksTree( currentBlock[ x ] );
+			blocks2 = blocks2.concat( parseBlocksTree( currentBlock[ x ] ) );
 		}
 		finalString = `# ${
 			( await logseq.Editor.getCurrentPage() ).originalName
@@ -96,8 +107,8 @@ export default async function parse(
 		logseq.settings[ `${ templateName }Choice` ] ==
 		'Bullets for non top level elements'
 	) {
+        console.log( 'BLOCKS2' , blocks2 );
 		for ( const x in blocks2 ) {
-			console.log( 'Hi' );
 			if (
 				! (
 					blocks2[ x ].uuid == block &&
@@ -119,7 +130,6 @@ export default async function parse(
 					}
 				}
 				//Filter to remove bullets when they are hastags as well
-				console.log( formattedText );
 				finalString = `${ finalString }\n\n ${ formattedText }`;
 			}
 		}
@@ -139,8 +149,8 @@ export default async function parse(
 					blocks2[ x ][ 0 ],
 					templateName
 				);
-				console.log( blocks2[ x ][ 1 ] );
-				if ( blocks2[ x ][ 1 ] > 0 ) {
+
+                if ( blocks2[ x ][ 1 ] > 0 ) {
 					formattedText = '- ' + formattedText;
 					for ( let step = 1; step < blocks2[ x ][ 1 ]; step++ ) {
 						//For each value of step add a space in front of the dash
@@ -187,8 +197,9 @@ export default async function parse(
 	} );
 }
 
-var blocks2 = [];
+
 function parseBlocksTree( obj ) {
+    var blocks2 = [];
 	conductParsing( obj );
 	function conductParsing( obj ) {
 		if ( obj.content != '' || obj.content != undefined ) {
@@ -205,4 +216,5 @@ function parseBlocksTree( obj ) {
 
 		obj.children.map( conductParsing );
 	}
+    return blocks2;
 }
