@@ -24,22 +24,21 @@ const App3: React.FC< { htmlText } > = ( { htmlText } ) => {
 			<div className="w-screen h-screen flex items-center justify-center text-black">
 				<div className="w-5/6 h-5/6 bg-clip-padding">
 					<div className="bg-slate-400 z-30 rounded-2xl p-4">
-						<h1 className="font-bold text-4xl">PDF Preview</h1>
+						<h1 className="font-bold text-4xl">WordPress Code</h1>
+						<div className="">
+							<button
+								className="button"
+								onClick={ () => console.log( 'Potato' ) }
+							>
+								Download
+							</button>
+						</div>
 						<br></br>
 						<div
 							dangerouslySetInnerHTML={ { __html: htmlText } }
 							id="cooldiv"
 							className="bg-white rounded-xl"
 						></div>
-						<br></br>
-						<div className="">
-							<button
-								className="button"
-								onClick={ () => downloadBulletLess() }
-							>
-								Download
-							</button>
-						</div>
 
 						{ /* <div><label><input type="checkbox"/>Value</label></div> */ }
 						{ /* <div><label><input type="checkbox" name = "Page Properties" onChange={ e => handleInputChange(e)}/>hide page properties</label></div>
