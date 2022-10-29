@@ -53,8 +53,9 @@ async function formatText( text2, template ) {
 	}
 
     // This will format links like [Title]([[Other page]]) to url contained in the target page IF it has a URL property.
-	const linkRef =  ( /\[([^\]]+)\]\(\[\[([^\]]+)\]\]\)/ ).exec( text );
-	if ( linkRef != null ) {
+	const linkRefRegex = ( /\[([^\]]+)\]\(\[\[([^\]]+)\]\]\)/g );
+	let linkRef = null;
+	if ( ( linkRef = linkRefRegex.exec( text ) ) !== null ) {
         const urlToReplace = await getUrlFromAttributeInPageName( linkRef[2] );
 		if ( urlToReplace ) {
 			text = text.replace(
@@ -68,7 +69,6 @@ async function formatText( text2, template ) {
 	let regRef = null;
 	const regRefRegex = ( /\[\[([^\]]+)\]\]/g );
 	while ( ( regRef = regRefRegex.exec( text ) ) !== null ) {
-		debugger;
         const urlToReplace = await getUrlFromAttributeInPageName( regRef[1] );
 		if ( urlToReplace ) {
 			text = text.replace(
