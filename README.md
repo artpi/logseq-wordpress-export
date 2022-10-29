@@ -8,6 +8,8 @@ The transformations include:
     - That way, you can keep your content linked via references inside your logseq database, but have the same content use URLs on your blog
     - This will also work for a reference in a link line this one: `[Click here]([[Blog Post -  Solarpunk Art Contest]])`
 
+![](https://user-images.githubusercontent.com/3775068/198847282-7e964d23-effb-4649-85dd-b0f63312840f.png)
+
 ## Instructions
 1. Click the [···] in the top-right corner to open the toolbar
 2. Click the "Download Page for WordPress" button
