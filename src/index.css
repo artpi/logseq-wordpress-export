@@ -7,19 +7,19 @@ html, body {
 }
 #root {
   @apply w-screen h-screen;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .button {
   padding: 5px 10px;
-  background-color: var(--cl-charcoal);
-  border: 1px solid #ddd;
-  color: white;
-  cursor: pointer;
-  border-radius: 10px;
-}
-
-.button:hover {
-  background-color: var(--cl-darkjungle);
+  background: #007cba;
+  color: #fff;
+  outline: 1px solid #0000;
+  text-decoration: none;
+  text-shadow: none;
+  white-space: nowrap;
+  border-radius: 3px;
+  margin: 10px;
 }
 
 .div.scroll {
@@ -46,4 +46,10 @@ html, body {
 
 .p {
   page-break-inside: avoid;
+}
+
+#root h1 {
+  line-height: 2.22222222;
+  font-size: 18px;
+  text-align: center;
 }

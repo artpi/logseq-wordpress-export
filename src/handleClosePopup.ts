@@ -11,3 +11,6 @@ export const handleClosePopup = () => {
 		false
 	);
 };
+export const closePopup = () => {
+	logseq.hideMainUI( { restoreEditingCursor: true } );
+}

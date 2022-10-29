@@ -1,23 +1,4 @@
-html {
-  --cl-charcoal: #3f3f3f;
-  --cl-darkjungle: #1e1e1e;
-  --cl-thunder: #4c4c4c;
-}
-.button {
-    padding: 10px 20px;
-    background-color: dodgerblue;
-    border: 1px solid #ddd;
-    color: white;
-    cursor: pointer;
-    border-radius: 10px;
-  }
 
-  .button:hover {
-    background-color: royalblue;
-  }
-  .form-group {
-    display: inline-block;
-}
 .centered-element {
   margin: 0;
   position: absolute;
@@ -63,6 +44,7 @@ html {
   padding: 20px;
 }
 
+.post-content div { margin-top:5x;margin-bottom:5px; line-height: 22px }
 .post_content h1 {  display: block;  font-size: 2em;  margin-block-start: 0.67__qem;  margin-block-end: 0.67em;  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
  .post_content h2 {  display: block;  font-size: 1.5em;  margin-block-start: 0.83__qem;  /* margin-block-end: 0.83em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
  .post_content h3 {  display: block;  font-size: 1.17em;  margin-block-start: 1__qem;  /* margin-block-end: 1em; */  margin-inline-start: 0;  margin-inline-end: 0;  font-weight: bold;}
@@ -84,3 +66,13 @@ html {
  .post_content .brmedium {  display: block;  margin-bottom: 1em;}
  .post_content  .brlarge {  display: block;  margin-bottom: 2em;}
  .post_content a { text-decoration: underline; color:blue }
+.preview_header {
+  border-bottom: 1px solid;
+  border-color: rgb(220, 220, 222);
+  padding: 10px;
+}
+
+.preview_window .ui__modal-close{
+  float:right;
+  cursor:pointer;
+}
