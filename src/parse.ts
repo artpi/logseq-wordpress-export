@@ -67,7 +67,7 @@ async function formatText( text2, template ) {
 
     // This will link [[Other blog post]] to the url parameter in that page.
 	let regRef = null;
-	const regRefRegex = ( /\[\[([^\]]+)\]\]/g );
+	const regRefRegex = ( /[^`]?\[\[([^\]]+)\]\][^`]?/g );
 	while ( ( regRef = regRefRegex.exec( text ) ) !== null ) {
         const urlToReplace = await getUrlFromAttributeInPageName( regRef[1] );
 		if ( urlToReplace ) {

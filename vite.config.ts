@@ -7,6 +7,6 @@ export default defineConfig({
   base: './',
   build: {
     target: "esnext",
-    //minify: false,
+    minify: false,
   },
 })
