@@ -44,13 +44,7 @@ async function formatText( text2, template ) {
 		''
 	); // Remove readwise links
 
-	if (
-		logseq.settings[ `${ template }Options` ].includes(
-			'Hide Page Properties'
-		)
-	) {
-		text = text.replaceAll( /((?<=::).*|.*::)/g, '' );
-	}
+	text = text.replaceAll( /((?<=::).*|.*::)/g, '' );
 
     // This will format links like [Title]([[Other page]]) to url contained in the target page IF it has a URL property.
 	const linkRefRegex = ( /\[([^\]]+)\]\(\[\[([^\]]+)\]\]\)/g );
@@ -67,7 +61,7 @@ async function formatText( text2, template ) {
 
     // This will link [[Other blog post]] to the url parameter in that page.
 	let regRef = null;
-	const regRefRegex = ( /[^`]?\[\[([^\]]+)\]\][^`]?/g );
+	const regRefRegex = ( /\[\[([^\]]+)\]\]/g );
 	while ( ( regRef = regRefRegex.exec( text ) ) !== null ) {
         const urlToReplace = await getUrlFromAttributeInPageName( regRef[1] );
 		if ( urlToReplace ) {
@@ -105,22 +99,10 @@ export default async function parse(
 		blocks2 = parseBlocksTree(
 			await logseq.Editor.getBlock( block, { includeChildren: true } )
 		);
-		if (
-			logseq.settings.blockExportHandling == 'Keep title as name of page'
-		) {
-			finalString = `# ${
-				( await logseq.Editor.getCurrentPage() ).originalName
-			}`;
-		} else if (
-			logseq.settings.blockExportHandling ==
-			'Keep title as heading of block'
-		) {
-			finalString = `# ${
-				( await logseq.Editor.getBlock( block ) ).content
-			}`;
-		} else {
-			finalString = ``;
-		}
+		finalString = `# ${
+			( await logseq.Editor.getCurrentPage() ).originalName
+		}`;
+
 	} else {
         // Print whole page
         let currentBlock = await logseq.Editor.getCurrentPageBlocksTree();
@@ -136,84 +118,30 @@ export default async function parse(
 		}`;
 	}
 
-	if (
-		logseq.settings[ `${ templateName }Choice` ] ==
-		'Bullets for non top level elements'
-	) {
-        console.log( 'BLOCKS2' , blocks2 );
-		for ( const x in blocks2 ) {
-			if (
-				! (
-					blocks2[ x ].uuid == block &&
-					logseq.settings.blockExportHandling ==
-						'Keep title as heading of block' &&
-					block != undefined
-				)
-			) {
-				var formattedText = await formatText(
-					blocks2[ x ][ 0 ],
-					templateName
-				);
-				//if templateName has bullets enabled
-				if ( blocks2[ x ][ 1 ] > 1 ) {
-					formattedText = '- ' + formattedText;
-					for ( let step = 1; step < blocks2[ x ][ 1 ]; step++ ) {
-						//For each value of step add a space in front of the dash
-						formattedText = '  ' + formattedText;
-					}
+	for ( const x in blocks2 ) {
+		if (
+			! (
+				blocks2[ x ].uuid == block &&
+				block != undefined
+			)
+		) {
+			var formattedText = await formatText(
+				blocks2[ x ][ 0 ],
+				templateName
+			);
+			//if templateName has bullets enabled
+			if ( blocks2[ x ][ 1 ] > 1 ) {
+				formattedText = '- ' + formattedText;
+				for ( let step = 1; step < blocks2[ x ][ 1 ]; step++ ) {
+					//For each value of step add a space in front of the dash
+					formattedText = '  ' + formattedText;
 				}
-				//Filter to remove bullets when they are hastags as well
-				finalString = `${ finalString }\n\n ${ formattedText }`;
 			}
-		}
-	} else if (
-		logseq.settings[ `${ templateName }Choice` ] ==
-		'Bullets througout the document'
-	) {
-		for ( const x in blocks2 ) {
-			if (
-				! (
-					Number( x ) == 0 &&
-					logseq.settings.blockExportHandling ==
-						'Keep title as heading of block'
-				)
-			) {
-				var formattedText = await formatText(
-					blocks2[ x ][ 0 ],
-					templateName
-				);
-
-                if ( blocks2[ x ][ 1 ] > 0 ) {
-					formattedText = '- ' + formattedText;
-					for ( let step = 1; step < blocks2[ x ][ 1 ]; step++ ) {
-						//For each value of step add a space in front of the dash
-						formattedText = '  ' + formattedText;
-					}
-				}
-				finalString = `${ finalString }\n\n ${ formattedText }`;
-			}
-		}
-	} else if (
-		logseq.settings[ `${ templateName }Choice` ] ==
-		'Flatten document(No bullets)'
-	) {
-		for ( const x in blocks2 ) {
-			if (
-				! (
-					blocks2[ x ].uuid == block &&
-					logseq.settings.blockExportHandling ==
-						'Keep title as heading of block'
-				)
-			) {
-				var formattedText = await formatText(
-					blocks2[ x ][ 0 ],
-					templateName
-				);
-
-				finalString = `${ finalString }\n\n ${ formattedText }`;
-			}
+			//Filter to remove bullets when they are hastags as well
+			finalString = `${ finalString }\n\n ${ formattedText }`;
 		}
 	}
+
 	finalString = finalString.replaceAll( '#+BEGIN_QUOTE', '' );
 	finalString = finalString.replaceAll( '#+END_QUOTE', '' );
 	// Make logseqs highlights into MD standard
