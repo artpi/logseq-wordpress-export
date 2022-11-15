@@ -23,7 +23,7 @@ function renderApp( env: string ) {
 
 const main = async () => {
 	logseq.App.registerUIItem( 'toolbar', {
-		key: 'logseq-pdf-export-plugin',
+		key: 'logseq-wordpress-export',
 		template:
 			'<a data-on-click="show" class="button"><i class="ti ti-file-export"></i></a>',
 	} );
